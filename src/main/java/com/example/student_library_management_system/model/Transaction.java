@@ -1,7 +1,10 @@
 package com.example.student_library_management_system.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.util.Date;
 
@@ -16,6 +19,7 @@ public class Transaction {
     private int id;
 
     @Column(name="transaction_date", nullable = false)
+    @CreationTimestamp
     private Date transactionDate;
 
     @Column(name="due_date")
@@ -23,5 +27,15 @@ public class Transaction {
 
     @Column(name="transaction_type", nullable = false)
     private String transactionType;
+
+    @JsonBackReference
+    @JoinColumn
+    @ManyToOne
+    private Card card;
+
+    @JsonBackReference
+    @JoinColumn
+    @ManyToOne
+    private Book book;
 
 }
