@@ -5,6 +5,7 @@ import com.example.student_library_management_system.repository.StudentRepositor
 import com.example.student_library_management_system.requestdto.StudentRequestDto;
 import com.example.student_library_management_system.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -51,6 +52,17 @@ public class StudentController {
         }
     }
 
+    @GetMapping("/findByPage")
+    public ResponseEntity<?> findAllStudentsByPage(@RequestParam int pageNo,@RequestParam int pageSize){
+        try{
+            Page<Student> response = studentService.findStudentByPage(pageNo,pageSize);
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        } catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Exception occurred : "+e.getMessage());
+        }
+    }
+
+
     @DeleteMapping("/deleteById/{id}")
     public ResponseEntity<?> deleteStudentById(@PathVariable Long id){
         try{
@@ -68,6 +80,25 @@ public class StudentController {
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Exception occurred : "+e.getMessage());
+        }
+    }
+
+    @GetMapping("/findByEmail")
+    public ResponseEntity<?> findStudentByEmail(@RequestParam String email) {
+        try {
+            Student response = studentService.findStudentByEmail(email);
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Exception occurred : " + e.getMessage());
+        }
+    }
+    @GetMapping("/findByGender")
+    public ResponseEntity<?> findStudentsByGender(@RequestParam String gender) {
+        try {
+            List<Student> response = studentService.findStudentByGender(gender);
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Exception occurred : " + e.getMessage());
         }
     }
 }
